@@ -1,4 +1,5 @@
 const db = require('./models')
+const user = require('./models/user')
 
 // db.user.create({
 //     firstName: 'Fatima',
@@ -18,11 +19,11 @@ const db = require('./models')
 //     console.log('Found Users:', foundUsers)
 // })
 
-db.user.findOne({
-    where: {firstName:'Taylor'}
-}).then(foundUser=>{
-    console.log('found user:', foundUser.dataValues.firstName)
-})
+// db.user.findOne({
+//     where: {firstName:'Taylor'}
+// }).then(foundUser=>{
+//     console.log('found user:', foundUser.dataValues.firstName)
+// })
 
 // db.user.findOrCreate({
 //     where: {
@@ -56,3 +57,62 @@ db.user.findOne({
 // .then(numRowsDeleted=>{
 //     console.log(numRowsDeleted)
 // })
+
+// get the first user in the table
+// db.user.findOne({
+//     where: {firstName: 'Fatima'}
+// })
+// .then(foundUser=>{
+//     console.log("adding pet to this user:", foundUser.firstName)
+//     foundUser.createPet({
+//         name: 'slimy',
+//         species: 'giant toad',
+//         description: 'he takes anti-anxiety meds'
+//     })
+//     .then(createdPet =>{
+//         console.log("just created:", createdPet.get())
+//     })
+// })
+// .catch(err=>{
+//     console.log(err)
+// })
+
+db.user.findByPk(4)
+// .then(foundFatima=>{
+//     foundFatima.getPets()
+//     .then(fatimasPets=>{
+//         console.log("Fatima's farm:", fatimasPets)
+//         // fatimasPets.forEach(pet=>{
+//         //     console.log(pet.name)
+//         // })
+//     })
+// })
+
+// db.pet.findOrCreate({
+//     where: {name: 'Simba'},
+//     default: {
+//         species: 'Ginger cat',
+//         description: 'maniac'
+//     }
+// })
+// .then(([pet, created])=>{
+//     db.user.findByPk(4)
+//     .then(foundFatima=>{
+//         foundFatima.addPet(pet)
+//         console.log(`${foundFatima.firstName} is now the proud owner of ${pet.name}`)
+//     })
+// })
+
+db.user.findAll({
+    include: [db.pet]
+})
+.then(foundUsers=>{
+    // each user will now have a .pets array containing any associated pets
+    foundUsers.forEach(user=>{
+        console.log(`${user.firstName}'s farm:`)
+        user.pets.forEach(pet=>{
+            console.log(pet.name)
+        })
+    })
+})
+
